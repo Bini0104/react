@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        body{
+            background-color: antiquewhite;
+        }
+
+       #header{
+            background: black;
+            height: 100px;
+            font-size: 40px;
+            font-weight: bold;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            color: white;
+       }
+
+       #button{
+            border-color: green;
+            background: greenyellow;
+            color: white;
+            margin-left: 20px;
+       }
+       #remove{
+        
+            background: red;
+            margin-left: 10px;
+       }    
+
+       #toDoBox{
+            background: rgb(253, 253, 224);
+            width:70%;
+            margin: auto;
+            padding: 5%;
+
+            display:block;
+            
+       }
+
+       #checkBoxToDoList{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+       }
+
+        #footer{
+        
+            background: black;
+            height: 50px;
+            
+            font-size: 15px;
+            color: white;
+
+            margin-top: 10%;
+
+            position : fixed;
+            left: 0;
+            bottom : 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header id="header">오늘의 할일!</header>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const {useState} = React;
+
+        function ToDoApp() {
+
+            const [toDo, setToDo] = useState([
+                {toDoNum: 1, toDoName:'할 일 목록 추가 할 곳'}
+            ]);
+
+            const [inputText, setInputText] = useState('');
+
+            const [nextToDoNum, setNextToDoNum] = useState(2);
+
+            const onChangeHandler = e => setInputText(e.target.value);
+
+            const onClickHandler = () => {
+
+                const changedToDo = toDo.concat({
+                    toDoNum: nextToDoNum,
+                    toDoName: inputText
+                });
+
+                setNextToDoNum(nextToDoNum + 1);
+                setToDo(changedToDo);
+                setInputText('');
+            }
+
+            const onRemove = toDoNum => {
+
+                const changedToDo = toDo.filter(toDoA => toDoA.toDoNum !== toDoNum);
+
+                setToDo(changedToDo);
+            }
+
+            const toDoAllList = toDo.map(toDoA =>
+                                <div id="checkBoxToDoList">
+                                    <input type="checkBox"/>
+                                    {toDoA.toDoName}
+                                    <button id="remove"onClick={() => onRemove(toDoA.toDoNum)}>X</button>
+                                </div>
+                                );
+
+            return(
+                <>
+                    <div id="toDoBox">
+                        <ul>{toDoAllList}</ul>
+                        <input value={inputText} onChange={onChangeHandler} />
+                        <button id="button" onClick={onClickHandler}>추가</button>
+                    </div>
+                </>
+
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<ToDoApp/>);
+
+    </script>
+
+    <footer id="footer">Copyright 2024. team-ohgiraffers all rights reserved.</footer>
+</body>
+</html>
